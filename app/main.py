@@ -5,14 +5,19 @@ import httpx
 app = FastAPI()
 BASE_URL = "https://jsonmock.hackerrank.com/api/moviesdata"
 
+
+async def fetch_movies(year: int) -> list[str]:
+    """Fetch movie data asynchronously and return list of titles."""
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.get(BASE_URL, params={"Year": year})
+    resp.raise_for_status()
+    payload = resp.json()
+    return [m["Title"] for m in payload.get("data", [])]
+
+
 @app.get("/movies/{year}")
 async def get_movies(year: int):
-    """Return list of movie titles for given year.
-
-    * Call the external API with ?Year=<year>
-    * Extract 'Title' from each object in the `data` array
-    * Return {"titles": [...]} preserving order
-    * If no movies found, raise 404 with detail "No Results Found"
-    """
-    # 👉 TODO: Implement me!
-    raise NotImplementedError("Implement the movies endpoint")
+    titles = await fetch_movies(year)
+    if not titles:
+        raise HTTPException(status_code=404, detail="No Results Found")
+    return {"titles": titles}
