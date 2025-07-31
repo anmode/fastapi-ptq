@@ -12,7 +12,7 @@ The endpoint must:
 ## Tech Stack
 | Tool | Version | Purpose |
 |------|---------|---------|
-| Python | 3.10+ | Runtime |
+| Python | 3.8+ | Runtime |
 | FastAPI | 0.111 | Web framework |
 | httpx | 0.27 | Async HTTP client |
 | Uvicorn | 0.29 | ASGI server (for manual runs) |
@@ -40,8 +40,4 @@ Automated tests (`tests/test_main.py`) will check:
 1. **200** response and correct JSON for a year with results.
 2. **404** with `"No Results Found"` for a year with no movies.
 3. Automatic **422** validation for non‑numeric years (FastAPI default).
-
-**Do not**:
-* Change file/folder names.
-* Modify `tests/` or test IDs.
 
